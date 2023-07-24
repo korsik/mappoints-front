@@ -4,6 +4,7 @@ import Table from "../../mainpage/table/Table";
 import TableDrawer from "../sidedrawers/TableDrawer";
 import DonutSymbol from "../../visuals/DonutSymbol";
 import { useEntryInfoWindow, useSelectCategory } from "../../../state/AppState";
+import { Reports } from "../../mainpage/reports/Reports";
 
 const filter_options = {
   headings: ["Κατάσταση Φωτιστικού", "Σύμβολο"],
@@ -136,14 +137,16 @@ const Tabs = () => {
         return <Map />;
       case 3:
         return (
-          <div className="flex flex-row">
-            <div className="w-9/12">
+          // <div className="flex flex-row">
+            /* <div className="w-9/12">
               <Map />
-            </div>
-            <div className="w-3/12">
-              <TableDrawer table_data={filter_options2} />
-            </div>
-          </div>
+            </div> */
+            /* <div className="w-3/12"> */
+            /* <TableDrawer table_data={filter_options2} /> */
+             
+            /* </div> */
+          // </div>
+          <Reports />
         );
       case 4:
         return (
@@ -178,13 +181,14 @@ const Tabs = () => {
         >
           Χάρτης
         </a>
-        {/* <a
+         <a
           id={3}
           onClick={() => handleTabClick(3)}
           className={`tab ${activeTab === 3 ? "tab-active" : ""}`}
         >
-          Είδος Φωτιστικού
+          Αναφορές
         </a>
+       {/*
         <a
           id={4}
           onClick={() => handleTabClick(4)}
