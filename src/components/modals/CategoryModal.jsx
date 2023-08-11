@@ -8,7 +8,7 @@ const CategoryModal = ({ closeModal }) => {
   const [createCategory, setCreateCategory] = useState({
     name: "",
     description: "",
-    fields: []
+    fields: [],
   });
 
   const [fieldList, setFieldList] = useState([]);
@@ -18,7 +18,7 @@ const CategoryModal = ({ closeModal }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-  
+
     setCreateCategory((prevState) => ({
       ...prevState,
       [name]: value,
@@ -41,14 +41,14 @@ const CategoryModal = ({ closeModal }) => {
   const submitUser = () => {
     console.log(fieldList);
 
-    if(createCategory.name === "") {
+    if (createCategory.name === "") {
       console.log("Empty name. Please give a name to the field");
       return;
     }
-   
+
     save.mutateAsync(createCategory);
   };
-  
+
   const handleAddField = () => {
     const newField = {
       id: Date.now(), // unique identifier for the field
@@ -77,21 +77,20 @@ const CategoryModal = ({ closeModal }) => {
         }
         return field;
       });
-  
+
       setCreateCategory((prevData) => ({
         ...prevData,
         fields: newList,
       }));
-  
+
       return newList;
     });
-
   };
 
   return (
     <div className="flex w-full justify-center h-auto">
       <div className="flex flex-col bg-white justify-center shadow-lg p-6 m-6 rounded-lg">
-        <h3 className="font-bold text-center text-lg">Δημιουργία Κατηγορίας</h3>
+        <h3 className="font-bold text-center text-lg">Δημιουργία Οντότητας</h3>
         <input
           type="text"
           name="name"
@@ -127,41 +126,43 @@ const CategoryModal = ({ closeModal }) => {
           />
         </label>
         <ArrowDropDown name={"Tύπος Πεδίου"} data={["κείμενο", "αριθμός"]} updateData={updateType} /> */}
-       <div className="max-h-48 overflow-y-auto scrollbar-w-2 scrollbar-thumb-primary scrollbar-track-primary">
-       {fieldList.map((field) => (
-        <div key={field.id}>
-          <input
-            type="text"
-            name={`${field.name}`}
-            placeholder="Όνομα πεδίου"
-            className="input input-bordered input-primary my-3 w-full"
-            value={field.name}
-            onChange={(e) =>
-              handleInputChange(field.id, "name", e.target.value)
-            }
-          />
-          <label className="label cursor-pointer">
-            <span className="label-text">Υποχρεωτικό πεδίο</span>
-            <input
-              type="checkbox"
-              className={`toggle ${field.isRequired ? "toggle-primary" : ""}`}
-              checked={field.isRequired}
-              onChange={(e) =>
-                handleInputChange(field.id, "isRequired", e.target.checked)
-              }
-            />
-          </label>
-          <ArrowDropDown
-            name={"Tύπος Πεδίου"}
-            data={["κείμενο", "αριθμός"]}
-            updateData={(value) =>
-              handleInputChange(field.id, "type", value)
-            }
-          />
-          <div className="divider"></div>
+        <div className="max-h-48 overflow-y-auto scrollbar-w-2 scrollbar-thumb-primary scrollbar-track-primary">
+          {fieldList.map((field) => (
+            <div key={field.id}>
+              <input
+                type="text"
+                name={`${field.name}`}
+                placeholder="Όνομα πεδίου"
+                className="input input-bordered input-primary my-3 w-full"
+                value={field.name}
+                onChange={(e) =>
+                  handleInputChange(field.id, "name", e.target.value)
+                }
+              />
+              <label className="label cursor-pointer">
+                <span className="label-text">Υποχρεωτικό πεδίο</span>
+                <input
+                  type="checkbox"
+                  className={`toggle ${
+                    field.isRequired ? "toggle-primary" : ""
+                  }`}
+                  checked={field.isRequired}
+                  onChange={(e) =>
+                    handleInputChange(field.id, "isRequired", e.target.checked)
+                  }
+                />
+              </label>
+              <ArrowDropDown
+                name={"Tύπος Πεδίου"}
+                data={["κείμενο", "αριθμός"]}
+                updateData={(value) =>
+                  handleInputChange(field.id, "type", value)
+                }
+              />
+              <div className="divider"></div>
+            </div>
+          ))}
         </div>
-      ))}
-      </div>
 
         <button className="btn my-4 btn-secondary" onClick={handleAddField}>
           προσθηκη

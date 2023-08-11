@@ -7,10 +7,12 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import { createProfilesService } from "../../../services/profileService";
 
+import CloseButton from "../../CloseButton";
+
 const ProfileInsertDrawer = () => {
   const fruits = ["Apple", "Mango", "Banana", "GFG"];
   const createProfile = useCreateProfile((state) => state);
-
+  const toggleProfile = useProfileInStore((state) => state);
   const selectCategory = useSelectCategory((state) => state.selectCategory);
 
   console.log(selectCategory);
@@ -23,7 +25,7 @@ const ProfileInsertDrawer = () => {
             value: "",
           };
         })
-      : [],
+      : []
   );
 
   useEffect(() => {
@@ -36,7 +38,7 @@ const ProfileInsertDrawer = () => {
               value: "",
             };
           })
-        : [],
+        : []
     );
   }, [selectCategory]);
 
@@ -44,8 +46,6 @@ const ProfileInsertDrawer = () => {
     const { name, value } = e.target;
     createProfile.updateProfile({ [name]: value });
   };
-
-
 
   const handleFieldsChange = (id, name, value) => {
     if (!id) {
@@ -111,12 +111,36 @@ const ProfileInsertDrawer = () => {
           );
         })
       : [];
-
+  const CloseButtonE = () => {
+    var a = document.getElementById("insertLoc");
+    a.click();
+  };
+  const CustomButton = ({ onPress }) => {
+    return (
+      <button
+        className="x_stratos"
+        type="button"
+        onClick={() => {
+          var a = document.getElementById("insertLoc");
+          a.click();
+        }}
+      >
+        <b>X</b>
+      </button>
+    );
+  };
   // if (toggleProfile) {
   return (
     <div className="flex-row h-screen overflow-auto">
-      <div className="flex bg-primary w-full h-8 content-end justify-center items-center rounded-lg">
+      <div className="flex bg-base-100 w-full h-8 content-end justify-center items-center rounded-lg">
         ΚΑΤΑΧΩΡΗΣΗ ΠΡΟΦΙΛ
+        <CloseButton
+          onClick={() => {
+            toggleProfile.updateToggleProfileInsert(false);
+            // var a = document.getElementById("insertLoc");
+            // a.click();
+          }}
+        ></CloseButton>
       </div>
       <input
         type="text"
@@ -127,9 +151,14 @@ const ProfileInsertDrawer = () => {
         onChange={handleInputChange}
       />
       {fields}
-      <button className="btn btn-secondary mt-7 m-2" onClick={submitEntry}>
-        Αποθηκευση
-      </button>
+      <div className="flex">
+        <button
+          className=" stratis btn btn-primary text-white mt-7"
+          onClick={submitEntry}
+        >
+          Αποθηκευση
+        </button>
+      </div>
     </div>
   );
   // }

@@ -23,7 +23,7 @@ export const getEntries = async (category_id) => {
     throw new Error("Request failed");
   }
 
-  const data = await response.json();
+  const data = await response.json();   
   return data;
 };
 

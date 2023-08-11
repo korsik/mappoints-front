@@ -2,6 +2,7 @@ import React, { useEffect, useReducer, useState } from "react";
 import {
   useCreateEntry,
   useSelectCategory,
+  useInsertStore,
   useUpdateButton,
   useUpdateEntry,
 } from "../../../state/AppState";
@@ -12,14 +13,17 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import { getProfileQ } from "../../../queries/ProfilesQueries";
 import ArrowDropDown from "../../utils/ArrowDropDown";
+import CloseButton from "../../CloseButton";
 
 const InsertionDrawer = () => {
   const createEntry = useCreateEntry((state) => state);
   const selectCategory = useSelectCategory((state) => state.selectCategory);
   const updateBtn = useUpdateButton((state) => state.updateButtonState);
   const toggleBtnState = useUpdateButton(
-    (state) => state.toggleUpdateButtonState,
+    (state) => state.toggleUpdateButtonState
   );
+
+  const toggleInsert = useInsertStore((state) => state);
   const updateEntryId = useUpdateEntry((state) => state.entryId);
 
   const { data, refetch, isLoading } = getProfileQ(selectCategory?.pub_id);
@@ -34,7 +38,7 @@ const InsertionDrawer = () => {
             value: "",
           };
         })
-      : [],
+      : []
   );
 
   useEffect(() => {
@@ -74,7 +78,7 @@ const InsertionDrawer = () => {
                 value: "",
               };
             })
-          : [],
+          : []
       );
     }
   }, [selectCategory]);
@@ -161,15 +165,23 @@ const InsertionDrawer = () => {
   };
 
   return (
-    <div className="flex-row h-screen">
-      <div className="flex bg-primary w-full h-8 content-end justify-center items-center rounded-lg">
+    <div className="flex-col h-100 bg-base-100 p-5">
+      <div className="flex  w-full h-8 content-end justify-center items-center rounded-lg mb-2">
         ΚΑΤΑΧΩΡΗΣΗ
+        <CloseButton
+          onClick={() => {
+            toggleInsert.updateToggleInsert(false);
+            toggleBtnState(false);
+            // var a = document.getElementById("insertLoc");
+            // a.click();
+          }}
+        ></CloseButton>
       </div>
       <input
         type="text"
         name="address"
         placeholder="Διεύθυνση"
-        className="input input-bordered input-primary my-3 w-full max-w-xs"
+        className="input input-bordered input-primary  w-full"
         value={createEntry.entry.address}
         onChange={handleInputChange}
       />
@@ -177,50 +189,54 @@ const InsertionDrawer = () => {
         type="text"
         name="name"
         placeholder="Όνομα"
-        className="input input-bordered input-primary my-3 w-full max-w-xs"
+        className="input input-bordered input-primary my-3 w-full"
         value={createEntry.entry.name}
         onChange={handleInputChange}
       />
-      <div className="flex flex-row">
+      <div className="flex flex-col">
+        <label className="w-full max-w-xs ">Γεωγραφικό Μήκος</label>
         <input
           type="number"
           name="lat"
           placeholder="lat"
-          className="input input-bordered input-primary mx-3 w-full max-w-xs"
+          className="input input-bordered input-primary  w-full "
           value={createEntry.entry.lat}
           onChange={handleInputChange}
         />
+        <label>Γεωγραφικό Πλάτος</label>
+
         <input
           type="number"
           name="lng"
           placeholder="lng"
-          className="input input-bordered input-primary mx-3 w-full max-w-xs"
+          className="input input-bordered input-primary  w-full "
           value={createEntry.entry.long}
           onChange={handleInputChange}
         />
       </div>
-
       <ArrowDropDown
-        name="ΠΡΟΦΙΛ"
-        data={data ? data.map((d) => d.name): ["Δεν υπάρχει προφίλ"]}
+        name="Προφίλ"
+        data={data ? data.map((d) => d.name) : ["Δεν υπάρχει προφίλ"]}
         updateData={() => {}}
       />
-
       {selectCategory &&
         selectCategory.fields.map((field, index) => {
           return (
-            <input
-              key={index}
-              type="text"
-              name={field.name}
-              placeholder={field.name}
-              className="input input-bordered input-primary my-3 w-full max-w-xs"
-              value={field.value}
-              // createEntry.entry.fields
-              onChange={(e) =>
-                handleFieldsChange(field.id, "value", e.target.value)
-              }
-            />
+            <>
+              <label>{field.name}</label>
+              <input
+                key={index}
+                type="text"
+                name={field.name}
+                placeholder={field.name}
+                className="input input-bordered input-primary w-full "
+                value={field.value}
+                // createEntry.entry.fields
+                onChange={(e) =>
+                  handleFieldsChange(field.id, "value", e.target.value)
+                }
+              />
+            </>
           );
         })}
       <div className="my-5">
@@ -229,13 +245,18 @@ const InsertionDrawer = () => {
           name="color"
           placeholder="color"
           value={createEntry.entry.color}
-          className="input input-bordered input-primary my-3 w-full max-w-xs"
+          className="input input-bordered input-primary my-3 w-full "
           onChange={handleInputChange}
         />
       </div>
-      <button className="btn btn-secondary mt-7 m-2" onClick={submitEntry}>
-        Αποθηκευση
-      </button>
+      <div className="flex ">
+        <button
+          className=" stratis btn btn-primary text-white mt-7"
+          onClick={submitEntry}
+        >
+          Αποθηκευση
+        </button>
+      </div>
     </div>
   );
 };

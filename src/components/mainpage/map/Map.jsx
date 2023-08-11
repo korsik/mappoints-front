@@ -4,9 +4,19 @@ import {
   Marker,
   MarkerF,
   InfoWindowF,
+  OverlayViewF,
+  OverlayView,
+  useJsApiLoader,
   useLoadScript,
 } from "@react-google-maps/api";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { MarkerClusterer } from "https://cdn.skypack.dev/@googlemaps/markerclusterer@2.3.1";
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useMemo,
+  useState,
+} from "react";
 import {
   useAuthStore,
   useCreateEntry,
@@ -14,12 +24,37 @@ import {
   useEntryInfoWindow,
   useInsertStore,
   useProfileInStore,
+  useUpdateButton,
   useSelectCategory,
+  useUpdateEntry,
 } from "../../../state/AppState";
 import { getEntriesQ } from "../../../queries/EntriesQueries";
 import LoadingSpinner from "../../utils/LoadingSpinner";
 import Cookies from "js-cookie";
 import { newShade } from "../../../utils/colorShade";
+import { addToMarkers } from "../../map-nav/mapController";
+import EditMarkerPopPup from "./EditMarkerPopPup";
+import { SuperClusterAlgorithm } from "@googlemaps/markerclusterer";
+import Supercluster from "supercluster";
+
+const sc = new Supercluster({ radius: 40, maxZoom: 2000 });
+
+// const Mapi = new Map();
+// const customMap = new Mapi();
+
+// customMap.zoom = 10;
+
+function formatDataToGeoJsonPoints(data) {
+  return data.map((entries) => ({
+    type: "Feature",
+    geometry: {
+      type: "Point",
+      coordinates: [entries.lat, entries.long],
+    },
+
+    properties: { cluster: false, ...entries },
+  }));
+}
 
 const Map = () => {
   const isLoggedIn = useAuthStore((state) => state.updateIsLoggedIn);
@@ -34,17 +69,55 @@ const Map = () => {
   const [markers, setMarkers] = useState([{ center: center, color: "" }]);
   const [lastMarker, setLastMarker] = useState(-1);
 
-  const popInfoWindow = useEntryInfoWindow((state) => state.entry)
-  const isInfowOpened = useEntryInfoWindow((state) => state.isOpen)
+  const popInfoWindow = useEntryInfoWindow((state) => state.entry);
+
+  const isInfowOpened = useEntryInfoWindow((state) => state.isOpen);
+
+  const createEntryMarker = useCreateEntry((state) => state.updateEntry);
+  const updateEntry = useUpdateEntry((state) => state.entryIdToUpdate);
+  const updateBtn = useUpdateButton((state) => state.toggleUpdateButtonState);
+
+  const [clusters, setClusters] = useState([]);
+  const mapRef = useRef({ zoom: 0 });
+
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  // const onLoad = useCallback((map) => addMarkers(map, markers), []);
+  // const addMarkers = (map, data) => {
+  // console.log(map);
+  // console.log(data);
+  // new MarkerClusterer({
+  //   data,
+  //   map,
+  //   algorithm: new SuperClusterAlgorithm({
+  //     radius: 200,
+  //     maxZoom: zoom.options.maxZoom,
+  //   }),
+  // });
+  // };
+  const editBtn = (data) => {
+    createEntryMarker({
+      name: data.name,
+      address: data.address,
+      lat: data.lat,
+
+      long: data.long,
+      color: data.color,
+      data: data.data ? JSON.parse(data.data) : [],
+    });
+    updateEntry(data.pub_id);
+    setModalOpen(true);
+    updateBtn(true);
+  };
 
   useEffect(() => {
-    if(isInfowOpened){
-    onMarkerClick({
-      center: {lat: +popInfoWindow.lat, lng: +popInfoWindow.long},
-      color: popInfoWindow.color,
-      marker: popInfoWindow
-    });
-  }
+    if (isInfowOpened) {
+      onMarkerClick({
+        center: { lat: +popInfoWindow.lat, lng: +popInfoWindow.long },
+        color: popInfoWindow.color,
+        marker: popInfoWindow,
+      });
+    }
   }, [isInfowOpened]);
 
   const pinBackground = useMemo(
@@ -53,7 +126,7 @@ const Map = () => {
       borderColor: newShade(createEntry.entry.color, 15),
       glyphColor: newShade(createEntry.entry.color, 15),
     }),
-    [createEntry.entry.color],
+    [createEntry.entry.color]
   );
 
   const addMarker = (ev) => {
@@ -94,13 +167,32 @@ const Map = () => {
 
   const { data, refetch, isLoading } = getEntriesQ(selectCategory?.pub_id);
 
+  const [zoom, setZoom] = useState(1);
+  const [bounds, setBounds] = useState([0, 0, 0, 0]);
+
+  useEffect(() => {
+    if (data?.length && mapRef.current) {
+      console.log(
+        "Weeeeeeeeeeeeeeeeeeeeeeelcomeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+      );
+      sc.load(formatDataToGeoJsonPoints(data));
+      console.debug;
+      console.log(formatDataToGeoJsonPoints(data));
+      setClusters(sc.getClusters(bounds, zoom));
+    }
+  }, [data, bounds, zoom]);
+
+  useEffect(() => {
+    console.log(clusters);
+  }, [clusters]);
+
   const [activeMarker, setActiveMarker] = useState(null);
   const [showInfoWindow, setShowInfoWindow] = useState(false);
 
   const onMarkerClick = (marker) => {
-    console.log(marker)
-    setActiveMarker(marker);
-    setShowInfoWindow(true);
+    console.log(marker);
+    // setActiveMarker(marker);
+    editBtn(marker);
   };
 
   const onInfoWindowClose = () => {
@@ -125,6 +217,8 @@ const Map = () => {
             marker: entry,
           },
         ]);
+        console.log("mark");
+        console.log(markers);
 
         // console.log(
         //   `The profileInsert is ${pinBackground.borderColor} and the singleInsett is ${pinBackground.background}`,
@@ -133,7 +227,6 @@ const Map = () => {
       entries.updateEntries(data);
     }
   }, [data]);
-
 
   useEffect(() => {
     refetch();
@@ -146,6 +239,23 @@ const Map = () => {
 
   if (isLoading) {
     return <LoadingSpinner />;
+  }
+  function handleBoundsChanged() {
+    if (mapRef.current) {
+      const bounds = mapRef.current.getBounds()?.toJSON();
+      setBounds([
+        bounds?.west || 0,
+        bounds?.south || 0,
+        bounds?.east || 0,
+        bounds?.north || 0,
+      ]);
+    }
+  }
+
+  function handleZoomChanged() {
+    if (mapRef.current) {
+      setZoom(mapRef.current?.zoom);
+    }
   }
 
   return (
@@ -161,6 +271,9 @@ const Map = () => {
               center={center}
               mapContainerClassName="w-full h-full drop-shadow-lg rounded-lg"
               onClick={addMarker}
+              // onBoundsChanged={handleBoundsChanged}
+              // onZoomChanged={handleZoomChanged}
+              // onLoad={onLoad}
             >
               {markers.map((point, index) => {
                 return (
@@ -179,17 +292,19 @@ const Map = () => {
                             scale: 2,
                             anchor: new google.maps.Point(10, 20),
                           },
-                          opts,
+                          opts
                         );
                       marker.setIcon(
                         customIcon({
                           background: point.color.background,
                           strokeColor: point.color.borderColor,
-                        }),
+                        })
                       );
+
                       marker.addListener("click", () => {
                         console.log("Marker clicked!");
-                        onMarkerClick(point);
+
+                        onMarkerClick(point.marker);
                       });
                       // onClick={onMarkerClick}
                       // return markerLoadHandler(marker, place);
@@ -197,24 +312,52 @@ const Map = () => {
                   />
                 );
               })}
+
+              {/* {clusters?.map(({ id, geometry, properties }) => {
+                const [lng, lat] = geometry.coordinates;
+                const { cluster, point_count, brand, model, year, available } =
+                  properties;
+
+                return cluster ? (
+                  <MarkerF
+                    key={`cluster-${id}`}
+                    onClick={() => handleClusterClick({ id: id, lat, lng })}
+                    position={{ lat, lng }}
+                    icon="/images/cluster-pin.png"
+                    label={getLabel(point_count)}
+                  />
+                ) : (
+                  <VehicleMarker
+                    key={`vehicle-${properties.id}`}
+                    position={{ lat, lng }}
+                    brand={brand}
+                    model={model}
+                    year={year}
+                    available={available}
+                  />
+                );
+              })} */}
+
               {activeMarker ? (
-                <InfoWindowF
-                  position={activeMarker.center}
-                  onCloseClick={() => onInfoWindowClose()}
-                  visible={showInfoWindow}
-                  disableAutoPan={false}
-                >
-                  <div>
-                    {
-                      Object.entries(activeMarker.marker).map(
-                        ([key, value]) => (
-                          <p key={key}>{`${key}: ${value}`}</p>
-                        ),
-                      )
-                      // .join("\n")
-                    }
-                  </div>
-                </InfoWindowF>
+                <>
+                  <InfoWindowF
+                    position={activeMarker.center}
+                    onCloseClick={() => onInfoWindowClose()}
+                    visible={showInfoWindow}
+                    disableAutoPan={false}
+                  >
+                    <div>
+                      {
+                        Object.entries(activeMarker.marker).map(
+                          ([key, value]) => (
+                            <p key={key}>{`${key}: ${value}`}</p>
+                          )
+                        )
+                        // .join("\n")
+                      }
+                    </div>
+                  </InfoWindowF>
+                </>
               ) : (
                 <></>
               )}

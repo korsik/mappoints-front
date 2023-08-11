@@ -16,7 +16,9 @@ const LeftDrawer = ({ isModalOpen, modal, users_table, activeState }) => {
 
   const [username, setUsername] = useState(user.username);
 
-  const userRole = JSON.parse(sessionStorage.getItem("user")).role;
+  const userRole = sessionStorage.getItem("user")
+    ? JSON.parse(sessionStorage.getItem("user")).role
+    : "";
 
   useEffect(() => {
     // console.log(sessionStorage.user);
@@ -30,7 +32,7 @@ const LeftDrawer = ({ isModalOpen, modal, users_table, activeState }) => {
       onError: (error) => {
         console.error("An error occurred:", error);
       },
-    },
+    }
   );
   // console.log(Cookies.get("jwtToken"));
 
@@ -53,19 +55,15 @@ const LeftDrawer = ({ isModalOpen, modal, users_table, activeState }) => {
   }
 
   return (
-    <div className="flex flex-col bg-white h-screen">
+    <div className="flex flex-col  h-screen ">
       {/* drop-shadow-md */}
-      <div className="bg-base-100 h-1/5 flex justify-center items-center">
+      <div className="bg-base-100 h-20 flex justify-center items-center">
         <div>
-          <img
-            className="object-scale-down p-4 w-60"
-            src={mainLogo}
-            alt="exa logo"
-          />
+          <img className="" src={mainLogo} alt="exa logo" />
         </div>
       </div>
 
-      <div className="bg-primary rounded-lg justify-center items-center m-2 flex h-2/6">
+      <div className="bg-primary rounded-lg justify-center items-center m-2 flex h-40">
         <div className="space-y-2 flex flex-col w-4/5">
           {/* <label>Username</label> */}
           {/* <label>Δήμος</label> */}
@@ -75,10 +73,10 @@ const LeftDrawer = ({ isModalOpen, modal, users_table, activeState }) => {
       </div>
       {isLoading ? <LoadingSpinner /> : <></>}
       {userRole === "admin" || userRole === "super_admin" ? (
-        <div className="grow bg-base-100 p-4 text-base-content">
+        <div className="p-2 text-base-content flex h-15">
           {/* {" "} */}
           <button
-            className={`btn btn-outline btn-primary btn-wide p-2  rounded-lg  ${
+            className={`btn btn-outline btn-primary leftdrawerButton p-1 rounded-lg  ${
               activeState ? "bg-primary" : ""
             }`}
             onClick={users_table}
@@ -89,22 +87,20 @@ const LeftDrawer = ({ isModalOpen, modal, users_table, activeState }) => {
       ) : (
         <></>
       )}
-      <div className="grow bg-base-100 p-4 text-base-content">
+      <div className="p-2 text-base-content flex h-15">
         <button
-          className={`btn btn-outline btn-primary btn-wide p-2  rounded-lg  ${
+          className={`btn btn-outline btn-primary leftdrawerButton p-2  rounded-lg   ${
             isModalOpen ? "bg-primary" : ""
           }`}
           onClick={modal}
         >
-          <a className="text-base-content">προσθηκη κατηγοριας</a>
+          <a className="text-base-content">προσθηκη Οντοτητας</a>
         </button>
       </div>
-      <div className="bg-base-100 px-4 text-base-content">
-        <a>Κατηγορίες</a>
-      </div>
+      <div className="bg-base-100 px-4 text-base-content"></div>
 
-      <div className="max-h-screen h-1/3 overflow-auto">
-        <ul className="menu px-4 bg-base-100 text-base-content">
+      <div className="max-h-screen h-1/2 overflow-auto">
+        <ul className="menu px-4 bg-base-100 text-base-content ">
           {/* h-screen */}
           {isError ? <></> : list}
         </ul>

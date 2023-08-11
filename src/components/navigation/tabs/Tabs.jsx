@@ -6,6 +6,8 @@ import DonutSymbol from "../../visuals/DonutSymbol";
 import { useEntryInfoWindow, useSelectCategory } from "../../../state/AppState";
 import { Reports } from "../../mainpage/reports/Reports";
 
+import MapToolBar from "../../map-nav/MapToolBar";
+
 const filter_options = {
   headings: ["Κατάσταση Φωτιστικού", "Σύμβολο"],
   types: [
@@ -110,7 +112,7 @@ const Tabs = () => {
   // const [toggleState, setToggleState] = useState(1);
   const [activeTab, setActiveTab] = React.useState(1);
 
-  const resetShowInfoWindow = useEntryInfoWindow((state) => state.reset)
+  const resetShowInfoWindow = useEntryInfoWindow((state) => state.reset);
 
   const setCategory = useSelectCategory((state) => state.selectCategory);
 
@@ -134,17 +136,21 @@ const Tabs = () => {
           </div>
         );
       case 2:
-        return <Map />;
+        return (
+          <div>
+            <Map />
+          </div>
+        );
       case 3:
         return (
           // <div className="flex flex-row">
-            /* <div className="w-9/12">
+          /* <div className="w-9/12">
               <Map />
             </div> */
-            /* <div className="w-3/12"> */
-            /* <TableDrawer table_data={filter_options2} /> */
-             
-            /* </div> */
+          /* <div className="w-3/12"> */
+          /* <TableDrawer table_data={filter_options2} /> */
+
+          /* </div> */
           // </div>
           <Reports />
         );
@@ -181,14 +187,14 @@ const Tabs = () => {
         >
           Χάρτης
         </a>
-         <a
+        <a
           id={3}
           onClick={() => handleTabClick(3)}
           className={`tab ${activeTab === 3 ? "tab-active" : ""}`}
         >
           Αναφορές
         </a>
-       {/*
+        {/*
         <a
           id={4}
           onClick={() => handleTabClick(4)}

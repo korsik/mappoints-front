@@ -18,6 +18,13 @@ export const useProfileInStore = create((set) => ({
     set({ toggleProfileInsert: toggleState }),
 }));
 
+
+export const activeBulkEditor = create((set) => ({
+  activeBulkEditor: false,
+  updateActiveBulkEditor: (toggleState) => set({ activeBulkEditor: toggleState }),
+}));
+
+
 export const useInsertStore = create((set) => ({
   toggleInsert: false,
   updateToggleInsert: (toggleState) => set({ toggleInsert: toggleState }),

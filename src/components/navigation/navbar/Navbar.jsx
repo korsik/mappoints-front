@@ -1,6 +1,11 @@
 import React from "react";
-import Drawer from "../sidedrawers/LeftDrawer";
-import { useCreateEntry, useInsertStore, useProfileInStore, useUpdateButton } from "../../../state/AppState";
+
+import {
+  useCreateEntry,
+  useInsertStore,
+  useProfileInStore,
+  useUpdateButton,
+} from "../../../state/AppState";
 import Cookies from "js-cookie";
 
 const Navbar = ({ toggleDrawer }) => {
@@ -30,42 +35,45 @@ const Navbar = ({ toggleDrawer }) => {
 
   const refreshPage = () => {
     window.location.reload(true);
-  }
+  };
 
-  let list_items = <></>
-  if(Cookies.get('user_role') !== 'viewer') {
+  let list_items = <></>;
+  if (Cookies.get("user_role") !== "viewer") {
     list_items = (
       <>
-       <li>
-            <a
-              className="text-accent-content"
-              onClick={() => {
-                console.log(`The valus of profile is ${toggleProfile.toggleProfileInsert} and the value of single is ${toggleInsert.toggleInsert}`)
-                toggleProfile.updateToggleProfileInsert(
-                  !toggleProfile.toggleProfileInsert,
-                );
-                toggleInsert.updateToggleInsert(false);
-              }}
-            >
-              ΚΑΤΑΧΩΡΗΣΗ ΠΡΟΦΙΛ
-            </a>
-          </li>
-          <li>
-            <a
-              className="text-accent-content"
-              onClick={() => {
-                toggleProfile.updateToggleProfileInsert(
-                  false
-                );
-                toggleInsert.updateToggleInsert(!toggleInsert.toggleInsert);
-                updateBtn(false);
-                resetEntry();
-              }}
-            >
-              ΚΑΤΑΧΩΡΗΣΗ
-            </a>
-          </li></>
-    )
+        <li>
+          <a
+            id="insertProf"
+            className="text-accent-content"
+            onClick={() => {
+              console.log(
+                `The valus of profile is ${toggleProfile.toggleProfileInsert} and the value of single is ${toggleInsert.toggleInsert}`
+              );
+              toggleProfile.updateToggleProfileInsert(
+                !toggleProfile.toggleProfileInsert
+              );
+              toggleInsert.updateToggleInsert(false);
+            }}
+          >
+            ΚΑΤΑΧΩΡΗΣΗ ΠΡΟΦΙΛ
+          </a>
+        </li>
+        <li>
+          <a
+            id="insertLoc"
+            className="text-accent-content"
+            onClick={() => {
+              toggleProfile.updateToggleProfileInsert(false);
+              toggleInsert.updateToggleInsert(!toggleInsert.toggleInsert);
+              updateBtn(false);
+              resetEntry();
+            }}
+          >
+            ΚΑΤΑΧΩΡΗΣΗ
+          </a>
+        </li>
+      </>
+    );
   }
 
   return (
@@ -96,11 +104,11 @@ const Navbar = ({ toggleDrawer }) => {
       </div>
       <div className="flex-none hidden lg:block pr-14">
         <ul className="menu menu-horizontal">
-         {list_items}
+          {list_items}
           <li>
-            <a className="text-accent-content"
-            onClick={refreshPage}
-            >ΦΟΡΤΩΣΗ</a>
+            <a className="text-accent-content" onClick={refreshPage}>
+              ΦΟΡΤΩΣΗ
+            </a>
           </li>
         </ul>
       </div>

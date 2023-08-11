@@ -8,5 +8,29 @@
  } */
 
 
+ .mitsos{
+   max-width: 240px;
+}
 
+.leftdrawerButton{
+  width: 100%;
+  font: 12px;
+}
+.btn{
+  height: 2.2rem!important;
+  min-height: 2.2rem
+}
 
+.stratis{
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.x_stratos{
+  color:white;
+  background-color: red;
+  width: 32px;
+  margin-left:auto;
+  height: 32px;
+  border-radius: 6px;
+}

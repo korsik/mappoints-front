@@ -4,10 +4,10 @@ const ArrowDropDown = ({ name, data, updateData }) => {
   const options = data.length > 0 ? data : [];
 
   return (
-    <div className="flex flex-row justify-around items-center relative w-full my-1">
-      <span className="label-text mx-5">{name}</span>
+    <div className="flex flex-col  relative w-full my-1">
+      <span className="label-text ">{name}</span>
 
-      <div className="inline-block relative w-64 my-1">
+      <div className="inline-block relative w-full my-1">
         <select
           className="block appearance-none w-full bg-white border border-primary hover:border-primary-focus px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
           onChange={(e) => {

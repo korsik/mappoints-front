@@ -13,9 +13,9 @@ import LoadingSpinner from "../../utils/LoadingSpinner";
 import Cookies from "js-cookie";
 import { getEntriesQ } from "../../../queries/EntriesQueries";
 
-const Table = ({changeTab}) => {
+const Table = ({ changeTab }) => {
   const isLoggedIn = useAuthStore((state) => state.updateIsLoggedIn);
-  const userRole =  JSON.parse(sessionStorage.getItem("user")).role;
+  const userRole = JSON.parse(sessionStorage.getItem("user")).role;
 
   const selectCategory = useSelectCategory((state) => state.selectCategory);
 
@@ -39,15 +39,14 @@ const Table = ({changeTab}) => {
       name: data.name,
       address: data.address,
       lat: data.lat,
-      lat: data.lat,
       long: data.long,
       color: data.color,
-      data: data.data ? JSON.parse(data.data) : []
+      data: data.data ? JSON.parse(data.data) : [],
     });
     updateEntry(data.pub_id);
     setModalOpen(true);
     changeTab(2);
-  }
+  };
 
   const openModal = () => {
     createUser.reset();
@@ -112,9 +111,16 @@ const Table = ({changeTab}) => {
                 <td>{row.pub_id}</td>
                 <td>{row.address}</td>
                 <td>
-                {userRole !== "viewer" ?
-                  <ManagmentBtns openModal={editBtn} table="entries" data={row} mapBtn={changeTab} />
-                  : <></> }
+                  {userRole !== "viewer" ? (
+                    <ManagmentBtns
+                      openModal={editBtn}
+                      table="entries"
+                      data={row}
+                      mapBtn={changeTab}
+                    />
+                  ) : (
+                    <></>
+                  )}
                 </td>
               </tr>
             ))}
