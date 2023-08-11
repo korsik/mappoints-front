@@ -86,8 +86,12 @@ const Table = ({ changeTab }) => {
     isLoggedIn(false);
   }
 
-  if (isLoading) {
-    return <LoadingSpinner />;
+ if (isLoading) {
+    return (
+      <div className="h-screen flex flex-col w-full justify-center items-center">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   return (

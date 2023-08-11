@@ -237,9 +237,14 @@ const Map = () => {
     isLoggedIn(false);
   }
 
-  if (isLoading) {
-    return <LoadingSpinner />;
+ if (isLoading) {
+    return (
+      <div className="h-screen flex flex-col w-full justify-center items-center">
+        <LoadingSpinner />
+      </div>
+    );
   }
+
   function handleBoundsChanged() {
     if (mapRef.current) {
       const bounds = mapRef.current.getBounds()?.toJSON();
