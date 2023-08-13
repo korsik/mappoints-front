@@ -55,7 +55,7 @@ const Navbar = ({ toggleDrawer }) => {
               toggleInsert.updateToggleInsert(false);
             }}
           >
-            ΚΑΤΑΧΩΡΗΣΗ ΠΡΟΦΙΛ
+            ΚΑΤΑΧΩΡΗΣΗ ΕΙΔΟΥΣ
           </a>
         </li>
         <li>

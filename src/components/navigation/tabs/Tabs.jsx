@@ -132,7 +132,7 @@ const Tabs = () => {
           <Table changeTab={handleTabClick} />
         ) : (
           <div className="grid h-screen place-items-center">
-            Select a Category
+            Επιλογή Αντικειμένου
           </div>
         );
       case 2:

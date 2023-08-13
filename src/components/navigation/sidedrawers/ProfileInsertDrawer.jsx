@@ -133,7 +133,7 @@ const ProfileInsertDrawer = () => {
   return (
     <div className="flex-row h-screen overflow-auto">
       <div className="flex bg-base-100 w-full h-8 content-end justify-center items-center rounded-lg">
-        ΚΑΤΑΧΩΡΗΣΗ ΠΡΟΦΙΛ
+        ΚΑΤΑΧΩΡΗΣΗ ΕΙΔΟΥΣ
         <CloseButton
           onClick={() => {
             toggleProfile.updateToggleProfileInsert(false);

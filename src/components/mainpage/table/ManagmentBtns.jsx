@@ -21,7 +21,7 @@ const ManagmentBtns = ({ openModal, table, data, mapBtn }) => {
     showInfoWindowEntry(data);
     openShowInfo(true);
   };
-  
+
   const delEntry = useMutation(deleteEntryService, {
     onSuccess: (data) => {
       console.log("Success");
@@ -43,10 +43,9 @@ const ManagmentBtns = ({ openModal, table, data, mapBtn }) => {
     delEntry.mutateAsync(data.pub_id);
   };
 
-
   const deleteUser = () => {
     console.log(data.pub_id);
-    delUser.mutateAsync(data.pub_id)
+    delUser.mutateAsync(data.pub_id);
   };
 
   const deleteData = () => {

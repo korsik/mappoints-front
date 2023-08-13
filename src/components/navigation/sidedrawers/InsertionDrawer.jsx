@@ -215,8 +215,8 @@ const InsertionDrawer = () => {
         />
       </div>
       <ArrowDropDown
-        name="Προφίλ"
-        data={data ? data.map((d) => d.name) : ["Δεν υπάρχει προφίλ"]}
+        name="Ειδος"
+        data={data ? data.map((d) => d.name) : ["Δεν υπάρχει Είδος"]}
         updateData={() => {}}
       />
       {selectCategory &&
