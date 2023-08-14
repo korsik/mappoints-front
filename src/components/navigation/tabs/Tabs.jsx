@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Map from "../../mainpage/map/Map";
 import Table from "../../mainpage/table/Table";
 import TableDrawer from "../sidedrawers/TableDrawer";
@@ -119,6 +119,10 @@ const Tabs = () => {
   // const toggleTab = (index) => {
   //   setToggleState(index);
   // };
+
+  useEffect(() => {
+    handleTabClick(2);
+  }, [setCategory]);
 
   const handleTabClick = (tabIndex) => {
     resetShowInfoWindow();

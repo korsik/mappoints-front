@@ -60,12 +60,12 @@ const ManagmentBtns = ({ openModal, table, data, mapBtn }) => {
 
   return (
     <>
-      <div className="space-x-2 justify-center items-center">
+      <div className="space-x-2 h-14 justify-center items-center">
         {table === "users" ? (
           <></>
         ) : (
           <button
-            className="btn bg-base-300 hover:btn-success btn-square"
+            className="bg-base-300 rounded-lg hover:btn-success btn-square"
             onClick={mapRedirect}
           >
             <svg
@@ -107,7 +107,7 @@ const ManagmentBtns = ({ openModal, table, data, mapBtn }) => {
         )}
 
         <button
-          className="btn bg-base-300 hover:btn-warning btn-square"
+          className="bg-base-300 rounded-lg hover:btn-warning btn-square"
           onClick={updateButtonPressed}
         >
           <svg
@@ -126,9 +126,10 @@ const ManagmentBtns = ({ openModal, table, data, mapBtn }) => {
         </button>
 
         <button
-          className="btn bg-base-300 hover:btn-error btn-square"
+          className="bg-base-300 rounded-lg hover:btn-error btn-square"
           onClick={() => setOpenDeleteModal(true)}
         >
+          {/* <div className="w-full h-full"> */}
           <svg
             viewBox="0 0 32 32"
             xmlns="http://www.w3.org/2000/svg"
@@ -147,6 +148,7 @@ const ManagmentBtns = ({ openModal, table, data, mapBtn }) => {
               <line className="cls-1" x1="19" x2="19" y1="12" y2="22" />
             </g>
           </svg>
+          {/* </div> */}
         </button>
       </div>
 

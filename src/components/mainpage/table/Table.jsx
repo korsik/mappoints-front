@@ -65,7 +65,7 @@ const Table = ({ changeTab }) => {
   const { data, refetch, isLoading } = getEntriesQ(selectCategory.pub_id);
 
   useEffect(() => {
-    if (data) {
+    if (data && Array.isArray(data)) {
       setRecords({
         records: data.slice(firstIndex, lastIndex),
         npage: Math.ceil(data.length / recordsPerPage),
