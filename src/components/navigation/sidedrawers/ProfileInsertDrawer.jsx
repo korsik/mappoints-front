@@ -6,7 +6,7 @@ import {
 } from "../../../state/AppState";
 import { useMutation } from "@tanstack/react-query";
 import { createProfilesService } from "../../../services/profileService";
-
+import ImageUpload from "../../utils/ImageUpload";
 import CloseButton from "../../CloseButton";
 
 const ProfileInsertDrawer = () => {
@@ -47,6 +47,19 @@ const ProfileInsertDrawer = () => {
     createProfile.updateProfile({ [name]: value });
   };
 
+  const [image, setImage] = useState(null);
+
+  const handleImageUpload = (e) => {
+    const selectedImage = e.target.files[0];
+    setImage(selectedImage);
+
+    setImage(selectedImage);
+
+    console.log(selectedImage);
+
+    
+  };
+
   const handleFieldsChange = (id, name, value) => {
     if (!id) {
       return;
@@ -74,23 +87,67 @@ const ProfileInsertDrawer = () => {
   const save = useMutation(createProfilesService, {
     onSuccess: (data) => {
       console.log("Success");
-      window.location.reload(true);
+      // window.location.reload(true);
     },
   });
 
-  const submitEntry = () => {
+  const submitEntry = async () => {
     createProfile.updateProfile({
-      ...createProfile.entry,
-      category: createProfile.pub_id,
+      ...createProfile.profile,
+      category: selectCategory.pub_id,
     });
 
     // console.log(createEntry.entry)
-    if (createProfile.profile.category === "") {
+    if (createProfile.profile.pub_id === "") {
+      console.log({
+        ...createProfile.profile,
+        category: selectCategory.pub_id,
+      });
       return;
     }
 
+    const jsonPayload = {
+      ...createProfile.profile,
+      category: "ed80293e-f06f-4ad9-9e64-8adc7e7e09e8",//selectCategory.pub_id,
+    }
+
+    const selectedImage = image;
+
     console.log(createProfile.profile);
-    save.mutateAsync(createProfile.profile);
+    
+    const formData = new FormData();
+    formData.append('file', selectedImage);
+    // formData.append('jsonPayload', JSON.stringify(jsonPayload));
+    formData.append('name', jsonPayload.name);
+    formData.append('data', JSON.stringify(jsonPayload.data));
+    formData.append('color', jsonPayload.color);
+    formData.append('category', "ed80293e-f06f-4ad9-9e64-8adc7e7e09e8");
+
+    // Object.keys(jsonPayload).forEach((key) => {
+    //   const value = jsonPayload[key];
+    
+    //   if (Array.isArray(value)) {
+    //     value.forEach((item, index) => {
+    //       Object.keys(item).forEach((itemKey) => {
+    //         formData.append(`${key}[${index}].${itemKey}`, item[itemKey]);
+    //       });
+    //     });
+    //   } else {
+    //     formData.append(key, value);
+    //   }
+    // });
+
+    
+
+    try {
+      await save.mutateAsync(formData);
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
+    // save.mutateAsync({
+    //   ...createProfile.profile,
+    //   category: selectCategory.pub_id,
+    // });
   };
 
   const fields =
@@ -151,6 +208,21 @@ const ProfileInsertDrawer = () => {
         onChange={handleInputChange}
       />
       {fields}
+
+      <div className="my-9">
+        <div className="my-2">Επιλογές Μάρκερ</div>
+        <ImageUpload setImageForSave={handleImageUpload} />
+        {/* </div>
+      <div className="my-5"> */}
+        <input
+          type="color"
+          name="color"
+          placeholder="color"
+          value={createProfile.profile.color}
+          className="input input-bordered input-primary my-3 w-full "
+          onChange={handleInputChange}
+        />
+      </div>
       <div className="flex">
         <button
           className=" stratis btn btn-primary text-white mt-7"

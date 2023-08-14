@@ -166,8 +166,9 @@ export const useCreateProfile = create((set) => ({
   profile: {
     name: "",
     category: "",
-    // color: "#ea4335",
     data: [],
+    // icon: "",
+    color: ""
   },
   updateProfile: (updatedProfile) => {
     set((state) => ({
@@ -175,3 +176,6 @@ export const useCreateProfile = create((set) => ({
     }));
   },
 }));
+
+
+

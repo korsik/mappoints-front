@@ -117,8 +117,10 @@ const InsertionDrawer = () => {
   // }, [createEntry.entry]);
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    
+    const { name, value } = e.name ? e : e.target;
     createEntry.updateEntry({ [name]: value });
+    setColor(e.value);
   };
 
   // const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
@@ -147,17 +149,48 @@ const InsertionDrawer = () => {
 
   const queryClient = useQueryClient();
 
-  const setProfileData = () => {
+  const setProfileData = (profile_a) => {
     console.log("hello profile");
+    console.log(profile_a);
+    let prof_data = null;
+    data.forEach(profile => {
+      if(profile.data !== {}) {
+        console.log(JSON.parse(profile.data));
+        console.log(profile);
+        prof_data = JSON.parse(profile.data);
+      }
+    })
+    
+    // handleInputChange({name: "color", value: profile_a.color})
+    createEntry.updateEntry({ color: profile_a.color });
+    setColor(profile_a.color);
+
+
     selectCategory.fields.forEach((field) => {
-      handleFieldsChange(field.id, "value", "yolanda");
+      console.log(`Profile id ${profile_a.id}`);
+      console.log(`Field id ${field.id}`);
+      const id = profile_a.data ? prof_data.find((obj) => obj.id === field.id) : null;
+      if(id) {
+        handleFieldsChange(field.id, "value", id.value);
+      }
     });
   };
+
+  const [color, setColor] = useState("#000000");
+
+  useEffect(() => {
+    console.log(createEntry.entry);
+  }, [createEntry.entry])
+
+  useEffect(() => {
+    createEntry.updateEntry({ color: color});
+  }, [color]);
 
   const submitEntry = () => {
     createEntry.updateEntry({
       ...createEntry.entry,
       category: selectCategory.pub_id,
+      color: color
     });
 
     // console.log(createEntry.entry)
@@ -167,6 +200,7 @@ const InsertionDrawer = () => {
       console.log({
         ...createEntry.entry,
         category: selectCategory.pub_id,
+        color: color
       });
       return;
     }
@@ -238,7 +272,7 @@ const InsertionDrawer = () => {
       </div>
       <ArrowDropDown
         name="Ειδος"
-        data={data ? data.map((d) => d.name) : ["Δεν υπάρχει Είδος"]}
+        data={data ? data  : ["Δεν υπάρχει Είδος"]} //.map((d) => {return {name: d.name, icon: d.icon }})
         updateData={setProfileData}
       />
       {/* {selectCategory &&
@@ -286,7 +320,8 @@ const InsertionDrawer = () => {
           type="color"
           name="color"
           placeholder="color"
-          value={createEntry.entry.color}
+          // value={createEntry.entry.color}
+          value={color}
           className="input input-bordered input-primary my-3 w-full "
           onChange={handleInputChange}
         />
