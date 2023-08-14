@@ -14,6 +14,7 @@ import { useMutation } from "@tanstack/react-query";
 import { getProfileQ } from "../../../queries/ProfilesQueries";
 import ArrowDropDown from "../../utils/ArrowDropDown";
 import CloseButton from "../../CloseButton";
+import ImageUpload from "../../utils/ImageUpload";
 
 const InsertionDrawer = () => {
   const createEntry = useCreateEntry((state) => state);
@@ -239,7 +240,11 @@ const InsertionDrawer = () => {
             </>
           );
         })}
-      <div className="my-5">
+        <div className="my-9">
+          <div className="my-2">Επιλογές Μάρκερ</div>
+        <ImageUpload />
+        {/* </div>
+      <div className="my-5"> */}
         <input
           type="color"
           name="color"
@@ -249,6 +254,8 @@ const InsertionDrawer = () => {
           onChange={handleInputChange}
         />
       </div>
+
+      
       <div className="flex ">
         <button
           className=" stratis btn btn-primary text-white mt-7"
