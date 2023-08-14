@@ -10,18 +10,20 @@ import {
   createEntryService,
   updateEntryService,
 } from "../../../services/EntriesService";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { getProfileQ } from "../../../queries/ProfilesQueries";
 import ArrowDropDown from "../../utils/ArrowDropDown";
 import CloseButton from "../../CloseButton";
 import ImageUpload from "../../utils/ImageUpload";
+import ImageUploadMultiple from "../../utils/ImageUploadMultiple";
+import { getEntriesQ } from "../../../queries/EntriesQueries";
 
 const InsertionDrawer = () => {
   const createEntry = useCreateEntry((state) => state);
   const selectCategory = useSelectCategory((state) => state.selectCategory);
   const updateBtn = useUpdateButton((state) => state.updateButtonState);
   const toggleBtnState = useUpdateButton(
-    (state) => state.toggleUpdateButtonState
+    (state) => state.toggleUpdateButtonState,
   );
 
   const toggleInsert = useInsertStore((state) => state);
@@ -39,7 +41,7 @@ const InsertionDrawer = () => {
             value: "",
           };
         })
-      : []
+      : [],
   );
 
   useEffect(() => {
@@ -79,7 +81,7 @@ const InsertionDrawer = () => {
                 value: "",
               };
             })
-          : []
+          : [],
       );
     }
   }, [selectCategory]);
@@ -89,7 +91,7 @@ const InsertionDrawer = () => {
       return;
     }
     // const dt = )
-    // console.log(dt);
+    console.log(value);
     setFieldList((prevList) => {
       const newList = prevList.map((field) => {
         if (field.id === id) {
@@ -103,7 +105,7 @@ const InsertionDrawer = () => {
         data: newList,
       });
 
-      // console.log(newList)
+      console.log(newList);
       return newList;
     });
   };
@@ -119,7 +121,7 @@ const InsertionDrawer = () => {
     createEntry.updateEntry({ [name]: value });
   };
 
-  const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
+  // const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
 
   const save = useMutation(createEntryService, {
     onSuccess: (data) => {
@@ -141,6 +143,17 @@ const InsertionDrawer = () => {
     },
   });
 
+  const { data_e, refetch_e, isLoading_e } = getEntriesQ(selectCategory.pub_id);
+
+  const queryClient = useQueryClient();
+
+  const setProfileData = () => {
+    console.log("hello profile");
+    selectCategory.fields.forEach((field) => {
+      handleFieldsChange(field.id, "value", "yolanda");
+    });
+  };
+
   const submitEntry = () => {
     createEntry.updateEntry({
       ...createEntry.entry,
@@ -149,6 +162,12 @@ const InsertionDrawer = () => {
 
     // console.log(createEntry.entry)
     if (createEntry.entry.category === "") {
+      console.log("No category");
+      console.log(createEntry.entry.category);
+      console.log({
+        ...createEntry.entry,
+        category: selectCategory.pub_id,
+      });
       return;
     }
 
@@ -163,6 +182,8 @@ const InsertionDrawer = () => {
     } else {
       save.mutateAsync(createEntry.entry);
     }
+    queryClient.invalidateQueries(["entries"]);
+    // refetch_e();
   };
 
   return (
@@ -218,30 +239,46 @@ const InsertionDrawer = () => {
       <ArrowDropDown
         name="Ειδος"
         data={data ? data.map((d) => d.name) : ["Δεν υπάρχει Είδος"]}
-        updateData={() => {}}
+        updateData={setProfileData}
       />
-      {selectCategory &&
+      {/* {selectCategory &&
         selectCategory.fields.map((field, index) => {
           return (
-            <>
+            <div key={field.id}>
+            <label>{field.name}</label>
+            <input
+              type="text"
+              name={field.name}
+              placeholder={field.name}
+              className="input input-bordered input-primary w-full"
+              value={field.value}
+              onChange={(e) => handleFieldsChange(field.id, "value", e.target.value)}
+            />
+          </div>
+          );
+        })} */}
+      {selectCategory &&
+        fieldList.map((field, index) => {
+          // Use fieldList instead of selectCategory.fields
+          return (
+            <div key={field.id}>
               <label>{field.name}</label>
               <input
-                key={index}
                 type="text"
                 name={field.name}
                 placeholder={field.name}
-                className="input input-bordered input-primary w-full "
+                className="input input-bordered input-primary w-full"
                 value={field.value}
-                // createEntry.entry.fields
                 onChange={(e) =>
                   handleFieldsChange(field.id, "value", e.target.value)
                 }
               />
-            </>
+            </div>
           );
         })}
-        <div className="my-9">
-          <div className="my-2">Επιλογές Μάρκερ</div>
+
+      <div className="my-9">
+        <div className="my-2">Επιλογές Μάρκερ</div>
         <ImageUpload />
         {/* </div>
       <div className="my-5"> */}
@@ -254,8 +291,11 @@ const InsertionDrawer = () => {
           onChange={handleInputChange}
         />
       </div>
+      <div className="my-9">
+        <div className="my-2">Φωτογραφίες καταχώρησης</div>
+        <ImageUploadMultiple />
+      </div>
 
-      
       <div className="flex ">
         <button
           className=" stratis btn btn-primary text-white mt-7"

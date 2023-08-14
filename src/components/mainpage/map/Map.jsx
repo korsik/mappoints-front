@@ -201,7 +201,7 @@ const Map = () => {
   };
 
   useEffect(() => {
-    if (data && data !== undefined) {
+    if (data && data !== undefined && Array.isArray(data)) {
       setMarkers([]);
       data.forEach((entry) => {
         const pinBackground = {
@@ -226,7 +226,7 @@ const Map = () => {
       });
       entries.updateEntries(data);
     }
-  }, [data]);
+  }, [data, refetch]);
 
   useEffect(() => {
     refetch();

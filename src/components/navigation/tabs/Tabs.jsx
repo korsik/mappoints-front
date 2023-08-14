@@ -121,7 +121,9 @@ const Tabs = () => {
   // };
 
   useEffect(() => {
-    handleTabClick(2);
+    if (setCategory) {
+      handleTabClick(2);
+    }
   }, [setCategory]);
 
   const handleTabClick = (tabIndex) => {
