@@ -129,6 +129,7 @@ const InsertionDrawer = () => {
     onSuccess: (data) => {
       console.log("Success");
       // forceUpdate();
+      refetch_e();
       createEntry.reset();
       createEntry.updateEntry({
         ...createEntry.entry,
@@ -141,6 +142,7 @@ const InsertionDrawer = () => {
     onSuccess: (data) => {
       console.log("Success");
       // closeModal();
+      refetch_e();
       toggleBtnState(false);
     },
   });
@@ -153,6 +155,9 @@ const InsertionDrawer = () => {
     console.log("hello profile");
     console.log(profile_a);
     let prof_data = null;
+    if(!Array.isArray(data)) {
+      return;
+    }
     data.forEach(profile => {
       if(profile.data !== {}) {
         console.log(JSON.parse(profile.data));
@@ -176,21 +181,24 @@ const InsertionDrawer = () => {
     });
   };
 
-  const [color, setColor] = useState("#000000");
+  const [color, setColor] = useState(createEntry.entry.color);
 
   useEffect(() => {
     console.log(createEntry.entry);
   }, [createEntry.entry])
 
   useEffect(() => {
-    createEntry.updateEntry({ color: color});
+    if(!color) {
+      return;
+    }
+    createEntry.updateEntry({ ["color"]: color});
   }, [color]);
 
   const submitEntry = () => {
     createEntry.updateEntry({
       ...createEntry.entry,
       category: selectCategory.pub_id,
-      color: color
+      color: createEntry.entry.color
     });
 
     // console.log(createEntry.entry)
@@ -200,7 +208,7 @@ const InsertionDrawer = () => {
       console.log({
         ...createEntry.entry,
         category: selectCategory.pub_id,
-        color: color
+        color: createEntry.entry.color
       });
       return;
     }
