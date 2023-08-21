@@ -1,4 +1,5 @@
-const BASE_URL = "https://mapsback.exasolutions.gr/";
+// const BASE_URL = "https://mapsback.exasolutions.gr";
+const BASE_URL = "http://localhost:3000";
 
 
 export const loginUser = async ({ username, password }) => {
@@ -23,5 +24,7 @@ export const loginUser = async ({ username, password }) => {
   //   console.log(data);
   return data;
 };
+
+
 
 

@@ -1,12 +1,13 @@
 import Cookies from "js-cookie";
 
-const BASE_URL = "https://mapsback.exasolutions.gr/";
+// const BASE_URL = "https://mapsback.exasolutions.gr/";
+const BASE_URL = "http://localhost:3000";
 
 export const getCategories = async () => {
   // console.log(jwt)
   const jwt = Cookies.get("jwtToken");
   // console.log(jwt)
-    const response = await fetch(`${BASE_URL}/categories/all`, {
+    const response = await fetch(`${BASE_URL}/categories/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
