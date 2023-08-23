@@ -94,7 +94,7 @@ const LeftDrawer = ({ isModalOpen, modal, users_table, activeState }) => {
           }`}
           onClick={modal}
         >
-          <a className="text-base-content">προσθηκη αντοικειμενου</a>
+          <a className="text-base-content">προσθηκη αντικειμενου</a>
         </button>
       </div>
       <div className="bg-base-100 px-4 text-base-content"></div>
