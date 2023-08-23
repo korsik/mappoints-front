@@ -10,10 +10,11 @@ const UserTable = () => {
   const isLoggedIn = useAuthStore((state) => state.logOut);
   // const updateBtnState = useUpdateButton(state => state.updateButtonState);
   const toggleUpdateButtonState = useUpdateButton(state => state.toggleUpdateButtonState);
-  const updateUser = useUpdateUser(state => state.userIdToUpdate)
+  const updateUser = useUpdateUser(state => state.userIdToUpdate);
 
   const createUser = useCreateUser((state) => state);
 
+  const [updateState, setUpdateState] = useState(false);
   const [records, setRecords] = useState({ records: [], npage: 1, numbers: 1 });
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,6 +34,7 @@ const UserTable = () => {
     });
     updateUser(data.pub_id);
     setModalOpen(true);
+    setUpdateState(true);
   }
 
   const openModal = () => {
@@ -43,6 +45,9 @@ const UserTable = () => {
   const closeModal = () => {
     setModalOpen(false);
     toggleUpdateButtonState(false);
+    if(updateState)  {
+      setUpdateState(false);
+    }
   };
 
   const changePage = (page) => {
@@ -118,7 +123,7 @@ const UserTable = () => {
       </div>
       {isModalOpen && (
         <div className="fixed flex w-full inset-0 justify-center items-center z-20">
-          <UserModal closeModal={closeModal} />
+          <UserModal closeModal={closeModal} fromTable={!updateState} updateState={updateState} />
           {/* <button className="btn" onClick={}>
             Close Modal
           </button> */}

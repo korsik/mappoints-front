@@ -102,7 +102,7 @@ const Navbar = ({ toggleDrawer }) => {
           Map Manager
         </a>
       </div>
-      <div className="flex-none hidden lg:block pr-14">
+      <div className="flex-none lg:block pr-14">
         <ul className="menu menu-horizontal">
           {list_items}
           <li>

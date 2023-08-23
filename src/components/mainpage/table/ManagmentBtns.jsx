@@ -12,8 +12,11 @@ const ManagmentBtns = ({ openModal, table, data, mapBtn }) => {
   const updateBtn = useUpdateButton((state) => state.toggleUpdateButtonState);
 
   const updateButtonPressed = () => {
+    if(table !== "users") {
+      updateBtn(true);
+    }
     openModal(data);
-    updateBtn(true);
+    
   };
 
   const mapRedirect = () => {

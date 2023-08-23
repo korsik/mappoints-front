@@ -147,7 +147,7 @@ const InsertionDrawer = () => {
     },
   });
 
-  const { data_e, refetch_e, isLoading_e } = getEntriesQ(selectCategory.pub_id);
+  const { data_e, refetch_e, isLoading_e } = getEntriesQ(selectCategory?.pub_id);
 
   const queryClient = useQueryClient();
 
@@ -208,7 +208,7 @@ const InsertionDrawer = () => {
       console.log({
         ...createEntry.entry,
         category: selectCategory.pub_id,
-        color: createEntry.entry.color
+        color: createEntry.entry
       });
       return;
     }
