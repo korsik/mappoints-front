@@ -1,14 +1,14 @@
 import Cookies from "js-cookie";
 
-const BASE_URL = "https://mapsback.exasolutions.gr/";
-// const BASE_URL = "http://localhost:3000";
+// const BASE_URL = "https://mapsback.exasolutions.gr/";
+const BASE_URL = "http://localhost:3000";
 
 export const getProfilesSerivce = async (category_id) => {
     if (!category_id || category_id === undefined) {
       throw new Error("Request failed");
     }
 
-    category_id = 'all';
+    // category_id = 'all';
     const jwt = Cookies.get("jwtToken");
     const response = await fetch(`${BASE_URL}/profiles/${category_id}`, {
       method: "GET",

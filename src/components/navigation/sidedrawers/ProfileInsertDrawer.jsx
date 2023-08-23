@@ -108,7 +108,7 @@ const ProfileInsertDrawer = () => {
 
     const jsonPayload = {
       ...createProfile.profile,
-      category: "ed80293e-f06f-4ad9-9e64-8adc7e7e09e8",//selectCategory.pub_id,
+      category: selectCategory.pub_id,//,
     }
 
     const selectedImage = image;
@@ -121,7 +121,7 @@ const ProfileInsertDrawer = () => {
     formData.append('name', jsonPayload.name);
     formData.append('data', JSON.stringify(jsonPayload.data));
     formData.append('color', jsonPayload.color);
-    formData.append('category', "ed80293e-f06f-4ad9-9e64-8adc7e7e09e8");
+    formData.append('category', selectCategory.pub_id);
 
     // Object.keys(jsonPayload).forEach((key) => {
     //   const value = jsonPayload[key];
