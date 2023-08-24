@@ -23,7 +23,7 @@ const InsertionDrawer = () => {
   const selectCategory = useSelectCategory((state) => state.selectCategory);
   const updateBtn = useUpdateButton((state) => state.updateButtonState);
   const toggleBtnState = useUpdateButton(
-    (state) => state.toggleUpdateButtonState,
+    (state) => state.toggleUpdateButtonState
   );
 
   const toggleInsert = useInsertStore((state) => state);
@@ -41,7 +41,7 @@ const InsertionDrawer = () => {
             value: "",
           };
         })
-      : [],
+      : []
   );
 
   useEffect(() => {
@@ -81,7 +81,7 @@ const InsertionDrawer = () => {
                 value: "",
               };
             })
-          : [],
+          : []
       );
     }
   }, [selectCategory]);
@@ -117,7 +117,6 @@ const InsertionDrawer = () => {
   // }, [createEntry.entry]);
 
   const handleInputChange = (e) => {
-    
     const { name, value } = e.name ? e : e.target;
     createEntry.updateEntry({ [name]: value });
     setColor(e.value);
@@ -147,7 +146,9 @@ const InsertionDrawer = () => {
     },
   });
 
-  const { data_e, refetch_e, isLoading_e } = getEntriesQ(selectCategory?.pub_id);
+  const { data_e, refetch_e, isLoading_e } = getEntriesQ(
+    selectCategory?.pub_id
+  );
 
   const queryClient = useQueryClient();
 
@@ -155,27 +156,32 @@ const InsertionDrawer = () => {
     console.log("hello profile");
     console.log(profile_a);
     let prof_data = null;
-    if(!Array.isArray(data)) {
+    if (!Array.isArray(data)) {
       return;
     }
-    data.forEach(profile => {
-      if(profile.data !== {}) {
-        console.log(JSON.parse(profile.data));
+    data.forEach((profile) => {
+      if (profile.data !== {}) {
         console.log(profile);
-        prof_data = JSON.parse(profile.data);
+        prof_data = profile.data;
       }
-    })
-    
+    });
+
     // handleInputChange({name: "color", value: profile_a.color})
     createEntry.updateEntry({ color: profile_a.color });
     setColor(profile_a.color);
 
-
     selectCategory.fields.forEach((field) => {
-      console.log(`Profile id ${profile_a.id}`);
       console.log(`Field id ${field.id}`);
-      const id = profile_a.data ? prof_data.find((obj) => obj.id === field.id) : null;
-      if(id) {
+      let id = null;
+      profile_a.data.forEach((obj) => {
+        console.log(obj);
+        if (obj.id === field.id) {
+          id = obj;
+          return obj;
+        }
+      });
+
+      if (id) {
         handleFieldsChange(field.id, "value", id.value);
       }
     });
@@ -185,20 +191,20 @@ const InsertionDrawer = () => {
 
   useEffect(() => {
     console.log(createEntry.entry);
-  }, [createEntry.entry])
+  }, [createEntry.entry]);
 
   useEffect(() => {
-    if(!color) {
+    if (!color) {
       return;
     }
-    createEntry.updateEntry({ ["color"]: color});
+    createEntry.updateEntry({ ["color"]: color });
   }, [color]);
 
   const submitEntry = () => {
     createEntry.updateEntry({
       ...createEntry.entry,
       category: selectCategory.pub_id,
-      color: createEntry.entry.color
+      color: createEntry.entry.color,
     });
 
     // console.log(createEntry.entry)
@@ -208,7 +214,7 @@ const InsertionDrawer = () => {
       console.log({
         ...createEntry.entry,
         category: selectCategory.pub_id,
-        color: createEntry.entry
+        color: createEntry.entry,
       });
       return;
     }
@@ -280,7 +286,7 @@ const InsertionDrawer = () => {
       </div>
       <ArrowDropDown
         name="Ειδος"
-        data={data ? data  : ["Δεν υπάρχει Είδος"]} //.map((d) => {return {name: d.name, icon: d.icon }})
+        data={data ? data : ["Δεν υπάρχει Είδος"]} //.map((d) => {return {name: d.name, icon: d.icon }})
         updateData={setProfileData}
       />
       {/* {selectCategory &&
