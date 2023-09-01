@@ -179,3 +179,14 @@ export const useCreateProfile = create((set) => ({
 
 
 
+export const useSuccessModal = create((set) => ({
+  message: "",
+  isOpen: false,
+  updateMessage: (newMessage) => 
+    set({ message: newMessage}),
+  updateIsOpen: (newIsOpen) => 
+    set({ isOpen: newIsOpen })
+}))
+
+
+

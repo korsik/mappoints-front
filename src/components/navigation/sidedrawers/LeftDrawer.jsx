@@ -44,7 +44,7 @@ const LeftDrawer = ({ isModalOpen, modal, users_table, activeState }) => {
   let list = <li>No items found</li>;
   if (Array.isArray(data)) {
     // console.log("Why here")
-    console.log(data);
+    // console.log(data);
     list = data.map((option) => {
       return (
         <li key={option.pub_id} onClick={() => setCategory(option)}>

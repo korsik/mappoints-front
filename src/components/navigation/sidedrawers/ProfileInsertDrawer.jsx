@@ -3,11 +3,13 @@ import {
   useCreateProfile,
   useProfileInStore,
   useSelectCategory,
+  useSuccessModal,
 } from "../../../state/AppState";
 import { useMutation } from "@tanstack/react-query";
 import { createProfilesService } from "../../../services/profileService";
 import ImageUpload from "../../utils/ImageUpload";
 import CloseButton from "../../CloseButton";
+import SuccessModal from "../../modals/SuccessModal";
 
 const ProfileInsertDrawer = () => {
   const fruits = ["Apple", "Mango", "Banana", "GFG"];
@@ -15,7 +17,7 @@ const ProfileInsertDrawer = () => {
   const toggleProfile = useProfileInStore((state) => state);
   const selectCategory = useSelectCategory((state) => state.selectCategory);
 
-  console.log(selectCategory);
+  // console.log(selectCategory);
   const [fieldList, setFieldList] = useState(
     selectCategory
       ? selectCategory.fields.map((field) => {
@@ -55,7 +57,7 @@ const ProfileInsertDrawer = () => {
 
     setImage(selectedImage);
 
-    console.log(selectedImage);
+    // console.log(selectedImage);
 
     
   };
@@ -84,10 +86,17 @@ const ProfileInsertDrawer = () => {
     });
   };
 
+  const [isSuccessModal, setIsSuccessModal] = useState(false);
+
+  const closeModal = () => {
+    setIsSuccessModal(false);
+  }
+
   const save = useMutation(createProfilesService, {
     onSuccess: (data) => {
       console.log("Success");
       // window.location.reload(true);
+      setIsSuccessModal(true);
     },
   });
 
@@ -99,10 +108,11 @@ const ProfileInsertDrawer = () => {
 
     // console.log(createEntry.entry)
     if (createProfile.profile.pub_id === "") {
-      console.log({
-        ...createProfile.profile,
-        category: selectCategory.pub_id,
-      });
+      // console.log({
+      //   ...createProfile.profile,
+      //   category: selectCategory.pub_id,
+      // });
+      // console.log("Papakia")
       return;
     }
 
@@ -113,7 +123,7 @@ const ProfileInsertDrawer = () => {
 
     const selectedImage = image;
 
-    console.log(createProfile.profile);
+    // console.log(createProfile.profile);
     
     const formData = new FormData();
     formData.append('file', selectedImage);
@@ -231,6 +241,11 @@ const ProfileInsertDrawer = () => {
           Αποθηκευση
         </button>
       </div>
+
+      {isSuccessModal && (
+        <SuccessModal message="Profile created Succesfully" modalOpen={closeModal} />
+      )}
+      
     </div>
   );
   // }

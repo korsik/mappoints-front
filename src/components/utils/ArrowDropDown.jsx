@@ -8,12 +8,12 @@ const ArrowDropDown = ({ name, data, updateData }) => {
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
-    console.log(option);
+    // console.log(option);
     updateData(option);
     setIsOpen(false);
   };
 
-  console.log(options);
+  // console.log(options);
 
   let display = (
     <div className="flex flex-col  relative w-full my-1">
@@ -89,7 +89,7 @@ const ArrowDropDown = ({ name, data, updateData }) => {
             className="block appearance-none w-full bg-white border border-primary hover:border-primary-focus px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
             onChange={(e) => {
               updateData(e.target.value);
-              console.log(e.target.value);
+              // console.log(e.target.value);
             }}
           >
             {options.map((option, index) => (

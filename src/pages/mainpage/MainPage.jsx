@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Tabs from "../../components/navigation/tabs/Tabs";
 import LeftDrawer from "../../components/navigation/sidedrawers/LeftDrawer";
 import ProfileInsertDrawer from "../../components/navigation/sidedrawers/ProfileInsertDrawer";
@@ -6,6 +6,7 @@ import InsertionDrawer from "../../components/navigation/sidedrawers/InsertionDr
 import {
   useInsertStore,
   useProfileInStore,
+  useSuccessModal,
   useUpdateButton,
 } from "../../state/AppState";
 import Navbar from "../../components/navigation/navbar/Navbar";
@@ -89,6 +90,11 @@ const MainPage = () => {
           </button> */}
             </div>
           )}
+
+         
+
+
+
         </div>
       </div>
       {/* </div> */}

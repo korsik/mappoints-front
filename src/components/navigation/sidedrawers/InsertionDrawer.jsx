@@ -17,6 +17,7 @@ import CloseButton from "../../CloseButton";
 import ImageUpload from "../../utils/ImageUpload";
 import ImageUploadMultiple from "../../utils/ImageUploadMultiple";
 import { getEntriesQ } from "../../../queries/EntriesQueries";
+import SuccessModal from "../../modals/SuccessModal";
 
 const InsertionDrawer = () => {
   const createEntry = useCreateEntry((state) => state);
@@ -25,6 +26,13 @@ const InsertionDrawer = () => {
   const toggleBtnState = useUpdateButton(
     (state) => state.toggleUpdateButtonState
   );
+
+
+  const [isSuccessModal, setIsSuccessModal] = useState(false);
+
+  const closeModal = () => {
+    setIsSuccessModal(false);
+  }
 
   const toggleInsert = useInsertStore((state) => state);
   const updateEntryId = useUpdateEntry((state) => state.entryId);
@@ -128,6 +136,7 @@ const InsertionDrawer = () => {
     onSuccess: (data) => {
       console.log("Success");
       // forceUpdate();
+      setIsSuccessModal(true);
       refetch_e();
       createEntry.reset();
       createEntry.updateEntry({
@@ -141,6 +150,7 @@ const InsertionDrawer = () => {
     onSuccess: (data) => {
       console.log("Success");
       // closeModal();
+      setIsSuccessModal(true);
       refetch_e();
       toggleBtnState(false);
     },
@@ -151,6 +161,8 @@ const InsertionDrawer = () => {
   );
 
   const queryClient = useQueryClient();
+
+
 
   const setProfileData = (profile_a) => {
     console.log("hello profile");
@@ -353,6 +365,9 @@ const InsertionDrawer = () => {
           Αποθηκευση
         </button>
       </div>
+      {isSuccessModal && (
+        <SuccessModal message="Entry created Succesfully" modalOpen={closeModal} />
+      )}
     </div>
   );
 };

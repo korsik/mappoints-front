@@ -172,25 +172,22 @@ const Map = () => {
 
   useEffect(() => {
     if (data?.length && mapRef.current) {
-      console.log(
-        "Weeeeeeeeeeeeeeeeeeeeeeelcomeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
-      );
       sc.load(formatDataToGeoJsonPoints(data));
-      console.debug;
-      console.log(formatDataToGeoJsonPoints(data));
+      // console.debug;
+      // console.log(formatDataToGeoJsonPoints(data));
       setClusters(sc.getClusters(bounds, zoom));
     }
   }, [data, bounds, zoom]);
 
-  useEffect(() => {
-    console.log(clusters);
-  }, [clusters]);
+  // useEffect(() => {
+  //   console.log(clusters);
+  // }, [clusters]);
 
   const [activeMarker, setActiveMarker] = useState(null);
   const [showInfoWindow, setShowInfoWindow] = useState(false);
 
   const onMarkerClick = (marker) => {
-    console.log(marker);
+    // console.log(marker);
     // setActiveMarker(marker);
     editBtn(marker);
   };
@@ -217,8 +214,8 @@ const Map = () => {
             marker: entry,
           },
         ]);
-        console.log("mark");
-        console.log(markers);
+        // console.log("mark");
+        // console.log(markers);
 
         // console.log(
         //   `The profileInsert is ${pinBackground.borderColor} and the singleInsett is ${pinBackground.background}`,
@@ -307,7 +304,6 @@ const Map = () => {
                       );
 
                       marker.addListener("click", () => {
-                        console.log("Marker clicked!");
 
                         onMarkerClick(point.marker);
                       });
